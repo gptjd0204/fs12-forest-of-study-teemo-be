@@ -1,0 +1,55 @@
+# --- 의존성 및 패키지 관리 ---
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# --- 빌드 결과물 및 임시 파일 ---
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.cache/
+.eslintcache
+.stylelintcache
+
+# --- 환경 변수 및 비밀 정보 ---
+.env
+.env.*
+!.env.example
+*.local
+
+# --- 에디터 및 시스템 파일 ---
+.vscode/
+.idea/
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- 미디어 및 바이너리 파일 ---
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.ico
+*.pdf
+*.zip
+*.mp4
+*.woff
+*.woff2
+*.ttf
+*.otf
+
+# --- 로그 파일 ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
