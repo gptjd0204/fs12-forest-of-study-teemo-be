@@ -17,10 +17,11 @@ model Study {
   title     String
   description  String?
   background  String
+  habits    Habit[]
+  pointLogs PointLog[]
+  timer     Timer?
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  habits    Habit[]
 
   @@map("studies")
 }
@@ -30,7 +31,7 @@ model Habit {
   id        Int      @id @default(autoincrement())
   studyId   Int      @map("study_id")
   name      String
-  startDate DateTime @map("srart_date")
+  startDate DateTime @map("start_date")
   endDate   DateTime? @map("end_date")
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -54,4 +55,39 @@ model HabitRecord {
 
   @@unique([habitId, date])
   @@map("habit_records")
+}
+
+// PointLog 스키마
+model PointLog {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @map("study_id")
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  points    Int      @default(0)
+  focusDuration Int  @map("focus_duration")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("point_logs")
+}
+
+// Timer 스키마
+enum Status {
+  IN_PROGRESS
+  PAUSED
+  CANCELED
+  COMPLETED
+}
+
+model Timer {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @unique @map("study_id")
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  status    Status   @default(CANCELED)
+  targetDuration Int @default(1500000) @map("target_duration")
+  elapsedTime Int    @default(0) @map("elapsed_time")
+  startedAt DateTime @default(now()) @map("started_at")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("timers")
 }
