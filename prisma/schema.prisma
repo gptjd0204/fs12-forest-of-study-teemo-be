@@ -60,7 +60,7 @@ model HabitRecord {
 // PointLog 스키마
 model PointLog {
   id        Int      @id @default(autoincrement())
-  studyId   Int
+  studyId   Int      @map("study_id")
   study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
   points    Int      @default(0)
   focusDuration Int  @map("focus_duration")
@@ -80,7 +80,7 @@ enum Status {
 
 model Timer {
   id        Int      @id @default(autoincrement())
-  studyId   Int      @unique
+  studyId   Int      @unique @map("study_id")
   study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
   status    Status   @default(CANCELED)
   targetDuration Int @default(1500000) @map("target_duration")
