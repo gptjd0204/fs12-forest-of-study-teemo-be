@@ -35,7 +35,7 @@ model Habit {
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  study     Study    @relation(fields: [studyId], references: [id])
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
   records   HabitRecord[]
 
   @@map("habits")
@@ -50,7 +50,7 @@ model HabitRecord {
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  habit     Habit    @relation(fields: [habitId], references: [id])
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 
   @@unique([habitId, date])
   @@map("habit_records")
