@@ -3,6 +3,15 @@ import prisma from '../lib/prisma.js';
 export const getTotalPoint = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    const hasStudy = await prisma.study.findFirst({
+      where: {
+        id,
+      },
+    });
+    if (!hasStudy) {
+      throw new Error('해당 스터디를 찾을 수 없습니다');
+    }
+
     const totalPoint = await prisma.pointLog.aggregate({
       where: {
         studyId: id,
