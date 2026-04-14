@@ -19,6 +19,7 @@ model Study {
   background  String
   habits    Habit[]
   pointLogs PointLog[]
+  timer     Timer?
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -67,4 +68,26 @@ model PointLog {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("point_logs")
+}
+
+// Timer 스키마
+enum Status {
+  IN_PROGRESS
+  PAUSED
+  CANCELED
+  COMPLETED
+}
+
+model Timer {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @unique
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  status    Status   @default(CANCELED)
+  targetDuration Int @default(1500000) @map("target_duration")
+  elapsedTime Int    @default(0) @map("elapsed_time")
+  startedAt DateTime @default(now()) @map("started_at")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("timers")
 }
