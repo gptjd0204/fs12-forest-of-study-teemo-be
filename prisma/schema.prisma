@@ -17,10 +17,10 @@ model Study {
   title     String
   description  String?
   background  String
+  habits    Habit[]
+  pointLogs PointLog[]
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  habits    Habit[]
 
   @@map("studies")
 }
@@ -30,7 +30,7 @@ model Habit {
   id        Int      @id @default(autoincrement())
   studyId   Int      @map("study_id")
   name      String
-  startDate DateTime @map("srart_date")
+  startDate DateTime @map("start_date")
   endDate   DateTime? @map("end_date")
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -54,4 +54,17 @@ model HabitRecord {
 
   @@unique([habitId, date])
   @@map("habit_records")
+}
+
+// PointLog 스키마
+model PointLog {
+  id        Int      @id @default(autoincrement())
+  studyId   Int
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  points    Int      @default(0)
+  focusDuration Int  @map("focus_duration")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("point_logs")
 }
