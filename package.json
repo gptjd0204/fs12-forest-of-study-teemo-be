@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "seed": "node prisma/seeds/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^6.19.3",
+    "cors": "^2.8.6",
     "express": "^5.2.1"
   },
   "devDependencies": {
