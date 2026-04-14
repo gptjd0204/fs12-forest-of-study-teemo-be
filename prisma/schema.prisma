@@ -17,6 +17,7 @@ model Study {
   title     String
   description String?
   background String
+  emojis    Emoji[]
   habits    Habit[]
   pointLogs PointLog[]
   timer     Timer?
@@ -95,3 +96,15 @@ model Timer {
   @@map("timers")
 }
 
+// Emoji 스키마
+model Emoji {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @map("study_id")
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  emoji     String   
+  count     Int      
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("emojis")
+}
