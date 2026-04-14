@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import studyRouter from './routes/studyRoute.js';
+import studyRoutes from './routes/studyRoutes.js';
 import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 
@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use('/api/points', pointsRoutes);
 // study
-app.use('/studies', studyRouter);
+app.use('/api/studies', studyRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
