@@ -48,16 +48,9 @@ export const getTodayHabits = async (req, res) => {
       },
     });
 
-    console.log('todayStart:', todayStart);
-    console.log('tomorrowStart:', tomorrowStart);
-    console.log('habitIds:', habitIds);
-    console.log('habitRecords:', habitRecords);
-
     const completedSet = new Set(
       habitRecords.filter((r) => r.isCompleted).map((r) => r.habitId),
     );
-
-    console.log('completedSet:', completedSet);
 
     const result = habits.map((h) => {
       return {
