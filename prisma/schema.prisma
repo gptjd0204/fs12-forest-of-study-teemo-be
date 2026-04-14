@@ -20,5 +20,38 @@ model Study {
   createdAt DateTime @default(now())  @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  habits    Habit[]
+
   @@map("studies")
+}
+
+// Habit 스키마
+model Habit {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @map("study_id")
+  name      String
+  startDate DateTime @map("srart_date")
+  endDate   DateTime? @map("end_date")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  records   HabitRecord[]
+
+  @@map("habits")
+}
+
+// HabitRecord 스키마
+model HabitRecord {
+  id        Int      @id @default(autoincrement())
+  habitId   Int      @map("habit_id")
+  date      DateTime
+  isCompleted  Boolean @default(false)  @map("is_completed")
+  createdAt DateTime @default(now())  @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@map("habit_records")
 }
