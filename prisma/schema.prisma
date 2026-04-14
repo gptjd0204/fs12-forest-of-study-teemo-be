@@ -20,7 +20,6 @@ model Study {
   habits    Habit[]
   pointLogs PointLog[]
   timer     Timer?
-  emojis    Emoji[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
