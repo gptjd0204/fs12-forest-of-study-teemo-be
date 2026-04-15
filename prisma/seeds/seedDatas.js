@@ -68,3 +68,86 @@ export const studySeedsData = [
     background: 'purple',
   },
 ];
+
+export const emojiSeedsData = [
+  {
+    studyId: 9,
+    emoji: '🙂‍↕️',
+    count: 30,
+  },
+  {
+    studyId: 9,
+    emoji: '😍',
+    count: 22,
+  },
+  {
+    studyId: 9,
+    emoji: '😊',
+    count: 99,
+  },
+  {
+    studyId: 9,
+    emoji: '🙄',
+    count: 30,
+  },
+  {
+    studyId: 9,
+    emoji: '😽',
+    count: 22,
+  },
+  {
+    studyId: 11,
+    emoji: '😰',
+    count: 30,
+  },
+  {
+    studyId: 11,
+    emoji: '🌈',
+    count: 22,
+  },
+  {
+    studyId: 11,
+    emoji: '🌹',
+    count: 99,
+  },
+  {
+    studyId: 11,
+    emoji: '🍾',
+    count: 99,
+  },
+  {
+    studyId: 11,
+    emoji: '😍',
+    count: 22,
+  },
+  {
+    studyId: 11,
+    emoji: '😊',
+    count: 99,
+  },
+  {
+    studyId: 11,
+    emoji: '👍',
+    count: 99,
+  },
+  {
+    studyId: 12,
+    emoji: '😁',
+    count: 99,
+  },
+  {
+    studyId: 12,
+    emoji: '🙂‍↕️',
+    count: 30,
+  },
+  {
+    studyId: 12,
+    emoji: '😍',
+    count: 22,
+  },
+  {
+    studyId: 12,
+    emoji: '😊',
+    count: 99,
+  },
+];
