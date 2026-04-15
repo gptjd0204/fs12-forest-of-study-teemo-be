@@ -145,3 +145,9 @@ export const createHabit = async (req, res) => {
     });
   }
 };
+
+// 습관 토글
+export const toggleHabit = async (req, res) => {
+  try {
+  } catch (error) {}
+};
