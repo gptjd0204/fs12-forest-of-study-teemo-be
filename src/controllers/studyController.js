@@ -16,12 +16,14 @@ export const getStudies = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message: '요청이 정상적으로 처리되었습니다.',
       data: studies,
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
