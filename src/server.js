@@ -5,7 +5,7 @@ import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
 import EmojiRoutes from './routes/EmojiRoutes.js';
-import createRoutes from './routes/createRoutes.js';
+import createRoutes from './routes/studyRoutes.js';
 
 dotenv.config();
 
