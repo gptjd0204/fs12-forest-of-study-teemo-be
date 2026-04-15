@@ -5,6 +5,7 @@ import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
 import EmojiRoutes from './routes/EmojiRoutes.js';
+import createRoutes from './routes/studyRoutes.js';
 import timerRoutes from './routes/timerRoutes.js';
 
 dotenv.config();
@@ -22,6 +23,8 @@ app.use('/api/studies', studyRoutes);
 app.use('/api/studies/:studyId/habits', HabitRoutes);
 
 app.use('/api/emojis', EmojiRoutes);
+// create
+app.use('/api/create', createRoutes);
 
 app.use('/api/timers', timerRoutes);
 
