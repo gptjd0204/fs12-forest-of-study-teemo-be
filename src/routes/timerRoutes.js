@@ -1,15 +1,18 @@
 import express from 'express';
 import {
+  createTimer,
+  getTimer,
   updatePause,
   updateReset,
   updateStart,
   updateTargetDuraion,
-  upsertTimer,
 } from '../controllers/timerController.js';
 
 const router = express.Router();
 
-router.post('/', upsertTimer);
+router.post('/:studyId', createTimer);
+
+router.get('/:studyId', getTimer);
 
 router.patch('/:studyId/target-duration', updateTargetDuraion);
 

@@ -1,32 +1,70 @@
 import prisma from '../lib/prisma.js';
 
-export const upsertTimer = async (req, res) => {
+export const createTimer = async (req, res) => {
   try {
-    const studyId = Number(req.body.studyId);
+    const studyId = Number(req.params.studyId);
 
     const hasStudy = await prisma.study.findFirst({
       where: {
         id: studyId,
       },
+      select: {
+        id: true,
+        timer: true,
+      },
     });
-    if (!hasStudy) {
+    if (!hasStudy.id) {
       throw new Error('해당 스터디를 찾을 수 없습니다');
     }
 
     // 타이머가 없을 때만 생성
-    const timer = await prisma.timer.upsert({
+    if (!hasStudy.timer) {
+      const timer = await prisma.timer.create({
+        data: {
+          studyId,
+        },
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: '타이머가 정상적으로 생성되었습니다.',
+        data: {
+          timer,
+        },
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: '이미 타이머가 생성되었습니다.',
+      data: {
+        timer: hasStudy.timer,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getTimer = async (req, res) => {
+  try {
+    const studyId = Number(req.params.studyId);
+
+    const timer = await prisma.timer.findFirst({
       where: {
         studyId,
       },
-      update: {},
-      create: {
-        studyId,
-      },
     });
+    if (!timer) {
+      throw new Error('해당 타이머를 찾을 수 없습니다');
+    }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: '타이머가 정상적으로 생성되었습니다.',
+      message: '요청이 정상적으로 처리되었습니다.',
       data: {
         timer,
       },
