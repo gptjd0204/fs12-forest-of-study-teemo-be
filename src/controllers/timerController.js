@@ -138,7 +138,7 @@ export const updateStart = async (req, res) => {
       },
       data: {
         status,
-        startedAt,
+        startedAt: new Date(startedAt),
       },
     });
 
@@ -177,7 +177,7 @@ export const updatePause = async (req, res) => {
 
     const now = Date.now();
 
-    const elapsedTime = now - timer.startedAt;
+    const elapsedTime = now - timer.startedAt + timer.elapsedTime;
 
     const updateStatus = await prisma.timer.update({
       where: {
