@@ -180,7 +180,7 @@ export const getStudy = async (req, res) => {
   try {
     const result = await prisma.study.findUnique({
       where: {
-        studyId: Number(studyId),
+        id: Number(studyId),
       },
     });
 
