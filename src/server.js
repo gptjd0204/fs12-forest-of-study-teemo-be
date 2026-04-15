@@ -5,6 +5,7 @@ import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
 import EmojiRoutes from './routes/EmojiRoutes.js';
+import createRoutes from './routes/studyRoutes.js';
 
 dotenv.config();
 
@@ -22,6 +23,9 @@ app.use('/api/studies/:studyId/habits', HabitRoutes);
 
 //emoji
 app.use('/api/emojis', EmojiRoutes);
+
+// create
+app.use('/api/create', createRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
