@@ -19,7 +19,7 @@ app.use('/api/points', pointsRoutes);
 // study
 app.use('/api/studies', studyRoutes);
 
-app.use('/api/studies/:studyId/habits', HabitRoutes);
+app.use('/api/habits', HabitRoutes);
 
 //emoji
 app.use('/api/emojis', EmojiRoutes);

@@ -70,7 +70,7 @@ export const getTodayHabits = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: '서버 내부 오류가 발생했습니다.',
-      errores: [],
+      errors: [],
     });
   }
 };
@@ -102,7 +102,7 @@ export const createHabit = async (req, res) => {
         errors: [
           {
             field: 'name',
-            reason: '이름은 이름은 2자 이상 20자 이하로 입력해주세요',
+            reason: '이름은 2자 이상 20자 이하로 입력해주세요',
           },
         ],
       });
@@ -129,9 +129,6 @@ export const createHabit = async (req, res) => {
         startDate: new Date(),
       },
     });
-
-    console.log('studyId:', studyId);
-    console.log('name:', name);
 
     return res.status(201).json({
       success: true,
