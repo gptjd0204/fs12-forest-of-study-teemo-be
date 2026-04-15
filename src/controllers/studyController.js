@@ -32,9 +32,9 @@ export const createStudy = async (req, res) => {
 
     if (
       !nickname?.trim() ||
-      !title.trim() ||
-      !background.trim() ||
-      !password.trim()
+      !title?.trim() ||
+      !background?.trim() ||
+      !password?.trim()
     ) {
       return res.status(400).json({
         success: false,
