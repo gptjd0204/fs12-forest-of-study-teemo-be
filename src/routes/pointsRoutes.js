@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTotalPoint } from '../controllers/pointsController.js';
+import { getTotalPoint } from '../controllers/PointsController.js';
 
 const router = express.Router();
 
