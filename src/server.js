@@ -6,7 +6,6 @@ import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
 import emojiRoutes from './routes/EmojiRoutes.js';
 import LogsRoutes from './routes/LogsRoutes.js';
-import createRoutes from './routes/studyRoutes.js';
 import timerRoutes from './routes/timerRoutes.js';
 
 dotenv.config();
@@ -26,9 +25,6 @@ app.use('/api/habits', HabitRoutes);
 
 //emoji
 app.use('/api/emojis', emojiRoutes);
-
-// create
-app.use('/api/create', createRoutes);
 
 app.use('/api/timers', timerRoutes);
 
