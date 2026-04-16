@@ -27,9 +27,6 @@ app.use('/api/habits', HabitRoutes);
 //emoji
 app.use('/api/emojis', emojiRoutes);
 
-// create
-app.use('/api/create', createRoutes);
-
 app.use('/api/timers', timerRoutes);
 
 // log
