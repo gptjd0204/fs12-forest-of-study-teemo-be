@@ -9,7 +9,12 @@ export const getStudyLogs = async (req, res) => {
     const study = await prisma.study.findUnique({
       where: { id: Number(studyId)},
     })
-
+    if (!study) {
+      return res.status(404).json({
+        success: false,
+        message: "스터디를 찾을 수 없습니다.",
+      });
+    }
     const { start, end } = getDateRange(date);
 
     const logs = await prisma.pointLog.findMany({
