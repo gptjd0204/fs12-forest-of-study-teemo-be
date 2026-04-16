@@ -4,7 +4,7 @@ import studyRoutes from './routes/studyRoutes.js';
 import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
-import EmojiRoutes from './routes/EmojiRoutes.js';
+import emojiRoutes from './routes/emojiRoutes.js';
 import LogsRoutes from './routes/LogsRoutes.js';
 import createRoutes from './routes/studyRoutes.js';
 import timerRoutes from './routes/timerRoutes.js';
@@ -23,7 +23,9 @@ app.use('/api/studies', studyRoutes);
 
 app.use('/api/habits', HabitRoutes);
 
-app.use('/api/emojis', EmojiRoutes);
+//emoji
+app.use('/api/emojis', emojiRoutes);
+
 // create
 app.use('/api/create', createRoutes);
 

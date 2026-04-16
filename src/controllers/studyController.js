@@ -174,6 +174,29 @@ export const getStudies = async (req, res) => {
   }
 };
 
+/* 하나의 스터디만을 반환합니다. */
+export const getStudy = async (req, res) => {
+  const { studyId } = req.params;
+  try {
+    const result = await prisma.study.findUnique({
+      where: {
+        id: Number(studyId),
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: '데이터가 성공적으로 로드되었습니다.',
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const createStudy = async (req, res) => {
   try {
     const { nickname, title, description, background, password } = req.body;
