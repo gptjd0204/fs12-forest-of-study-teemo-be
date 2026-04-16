@@ -268,3 +268,48 @@ export const createStudy = async (req, res) => {
     });
   }
 };
+
+export const updateStudy = async (req, res) => {
+  try {
+    const { studyId } = req.params;
+    const updateData = req.body;
+
+    if (!studyId) {
+      return res.status(400).json({
+        success: false,
+        message: 'id가 필요합니다',
+        errors: ['id is required'],
+      });
+    }
+
+    const study = await prisma.study.findUnique({
+      where: { id: Number(studyId) },
+    });
+
+    if (!study) {
+      return res.status(404).json({
+        success: false,
+        message: '해당 스터디를 찾을 수 없습니다',
+        errors: ['Study not found'],
+      });
+    }
+
+    const updatedStudy = await prisma.study.update({
+      where: { id: Number(studyId) },
+      data: updateData,
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: updatedStudy,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: '서버 오류',
+      errors: [error.message],
+    });
+  }
+};
