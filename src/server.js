@@ -5,6 +5,7 @@ import cors from 'cors';
 import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
 import EmojiRoutes from './routes/EmojiRoutes.js';
+import LogsRoutes from './routes/LogsRoutes.js';
 import createRoutes from './routes/studyRoutes.js';
 import timerRoutes from './routes/timerRoutes.js';
 
@@ -27,6 +28,9 @@ app.use('/api/emojis', EmojiRoutes);
 app.use('/api/create', createRoutes);
 
 app.use('/api/timers', timerRoutes);
+
+// log
+app.use('/api/logs', LogsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
