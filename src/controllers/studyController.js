@@ -244,8 +244,6 @@ export const deleteStudy = async (req, res) => {
       },
     });
 
-    console.log('restlt => ', result);
-
     res.status(200).json({
       success: true,
       message: '삭제에 성공했습니다.',
