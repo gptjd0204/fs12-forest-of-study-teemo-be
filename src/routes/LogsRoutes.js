@@ -5,6 +5,6 @@ import {
 
 const router = express.Router();
 
-router.get('/:studyId/Logs', getStudyLogs)
+router.get('/:studyId/logs', getStudyLogs)
 
 export default router;
