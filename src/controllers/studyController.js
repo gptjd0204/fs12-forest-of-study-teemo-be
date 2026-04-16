@@ -197,6 +197,68 @@ export const getStudy = async (req, res) => {
   }
 };
 
+export const validatePw = async (req, res) => {
+  const { studyId } = req.params;
+  const { password } = req.body;
+
+  try {
+    const result = await prisma.study.findUnique({
+      where: {
+        id: Number(studyId),
+        password: password,
+      },
+    });
+
+    if (!result) {
+      res.status(200).json({
+        success: true,
+        message: '비밀번호 불일치',
+        data: {
+          correct: false,
+        },
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: '비밀번호 일치',
+        data: {
+          correct: true,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteStudy = async (req, res) => {
+  const { studyId } = req.params;
+
+  try {
+    const result = await prisma.study.delete({
+      where: {
+        id: Number(studyId),
+      },
+    });
+
+    console.log('restlt => ', result);
+
+    res.status(200).json({
+      success: true,
+      message: '삭제에 성공했습니다.',
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const createStudy = async (req, res) => {
   try {
     const { nickname, title, description, background, password } = req.body;

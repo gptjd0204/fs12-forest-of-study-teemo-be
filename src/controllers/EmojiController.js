@@ -36,6 +36,15 @@ export const createEmoji = async (req, res) => {
   const { emoji } = req.body;
 
   try {
+    // const e = await prisma.emoji.findFirst({
+    //   where: {
+    //     studyId: Number(studyId),
+    //     emoji: emoji,
+    //   },
+    // });
+    // console.log('e => ', e);
+
+    // if (!e) {
     const result = await prisma.emoji.create({
       data: {
         studyId: Number(studyId),
@@ -43,7 +52,24 @@ export const createEmoji = async (req, res) => {
       },
     });
 
-    res.status(201).json({
+    //   return res.status(201).json({
+    //     success: true,
+    //     message: '요청이 정상적으로 처리되었습니다.',
+    //     data: result,
+    //   });
+    // }
+
+    // const result = await prisma.emoji.update({
+    //   where: {
+    //     studyId: Number(studyId),
+    //     id: e.id,
+    //   },
+    //   data: {
+    //     count: e.count + 1,
+    //   },
+    // });
+
+    res.status(200).json({
       success: true,
       message: '요청이 정상적으로 처리되었습니다.',
       data: result,
