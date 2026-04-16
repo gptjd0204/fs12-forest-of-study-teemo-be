@@ -202,7 +202,14 @@ export const toggleHabit = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: '습관 완료 상태가 변경되었습니다.',
-      data: {},
+      data: {
+        success: true,
+        message: '습관 완료 상태가 변경되었습니다.',
+        data: {
+          habitId: 22,
+          isCompleted: true,
+        },
+      },
     });
   } catch (error) {
     console.error(error);
