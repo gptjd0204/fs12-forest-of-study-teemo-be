@@ -1,9 +1,9 @@
 import express from 'express';
 import {
-  getTodayHabits,
   createHabit,
   toggleHabit,
-} from '../controllers/HabitController.js';
+} from '../controllers/HabitWriteController.js';
+import { getTodayHabits } from '../controllers/HabitReadController.js';
 
 const router = express.Router();
 
