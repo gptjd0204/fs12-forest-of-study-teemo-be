@@ -1,5 +1,6 @@
 import prisma from '../lib/prisma.js';
 
+// 총합 포인트 조회
 export const getTotalPoint = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

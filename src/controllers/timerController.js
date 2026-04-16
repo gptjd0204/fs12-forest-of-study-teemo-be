@@ -1,5 +1,6 @@
 import prisma from '../lib/prisma.js';
 
+// 스터디 타이머 생성
 export const createTimer = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);
@@ -41,6 +42,7 @@ export const createTimer = async (req, res) => {
   }
 };
 
+// 타이머 데이터 조회
 export const getTimer = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);
@@ -74,6 +76,7 @@ export const getTimer = async (req, res) => {
   }
 };
 
+// 집중 목표 시간 설정
 export const updateTargetDuraion = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);
@@ -115,6 +118,7 @@ export const updateTargetDuraion = async (req, res) => {
   }
 };
 
+// 타이머 시작
 export const updateStart = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);
@@ -159,6 +163,7 @@ export const updateStart = async (req, res) => {
   }
 };
 
+// 타이머 일시정지
 export const updatePause = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);
@@ -206,6 +211,7 @@ export const updatePause = async (req, res) => {
   }
 };
 
+// 타이머 리셋
 export const updateReset = async (req, res) => {
   try {
     const studyId = Number(req.params.studyId);

@@ -17,7 +17,9 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(cors());
 
+// point
 app.use('/api/points', pointsRoutes);
+
 // study
 app.use('/api/studies', studyRoutes);
 
@@ -30,6 +32,7 @@ app.use('/api/emojis', emojiRoutes);
 // create
 app.use('/api/create', createRoutes);
 
+// timer
 app.use('/api/timers', timerRoutes);
 
 // log
