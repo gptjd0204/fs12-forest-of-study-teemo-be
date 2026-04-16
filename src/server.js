@@ -21,6 +21,7 @@ app.use('/api/points', pointsRoutes);
 // study
 app.use('/api/studies', studyRoutes);
 
+// habit
 app.use('/api/habits', HabitRoutes);
 
 //emoji
