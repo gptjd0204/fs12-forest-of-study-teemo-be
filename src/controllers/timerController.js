@@ -9,16 +9,28 @@ export const createTimer = async (req, res) => {
       where: {
         id: studyId,
       },
-      select: {
-        timer: true,
-      },
     });
     if (!hasStudy) {
       throw new Error('해당 스터디를 찾을 수 없습니다');
     }
-    // 타이머가 없을 때만 생성
-    if (hasStudy.timer) {
-      throw new Error('이미 타이머가 생성되었습니다.');
+
+    // 완료된 타이머를 제외하고 조회
+    const isTimer = await prisma.timer.findFirst({
+      where: {
+        studyId,
+        status: {
+          not: 'COMPLETED',
+        },
+      },
+    });
+
+    // 타이머가 없을때만 타이머 생성
+    if (isTimer) {
+      res.status(200).json({
+        success: true,
+        message: '이미 타이머가 생성되었습니다.',
+      });
+      return;
     }
 
     const timer = await prisma.timer.create({
@@ -51,21 +63,26 @@ export const getTimer = async (req, res) => {
       where: {
         id: studyId,
       },
-      select: {
-        title: true,
-        timer: true,
-      },
     });
     if (!study) {
       throw new Error('해당 스터디를 찾을 수 없습니다');
     }
+
+    const timer = await prisma.timer.findFirst({
+      where: {
+        studyId,
+        status: {
+          not: 'COMPLETED',
+        },
+      },
+    });
 
     res.status(200).json({
       success: true,
       message: '요청이 정상적으로 처리되었습니다.',
       data: {
         title: study.title,
-        timer: study.timer,
+        timer,
       },
     });
   } catch (error) {
@@ -94,9 +111,12 @@ export const updateTargetDuraion = async (req, res) => {
       throw new Error('타이머 진행중엔 수정이 불가능합니다.');
     }
 
-    const updatedTargetDuration = await prisma.timer.update({
+    const updatedTargetDuration = await prisma.timer.updateMany({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
       data: {
         targetDuration,
@@ -127,6 +147,9 @@ export const updateStart = async (req, res) => {
     const timer = await prisma.timer.findFirst({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
     });
     if (!timer) {
@@ -138,13 +161,18 @@ export const updateStart = async (req, res) => {
 
     const startedAt = Date.now();
 
-    const updateStatus = await prisma.timer.update({
+    const updateStatus = await prisma.timer.updateMany({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
       data: {
         status,
-        startedAt: new Date(startedAt),
+        firstStartedAt:
+          timer.firstStartedAt === null ? new Date(startedAt) : undefined,
+        lastStartedAt: new Date(startedAt),
       },
     });
 
@@ -172,6 +200,9 @@ export const updatePause = async (req, res) => {
     const timer = await prisma.timer.findFirst({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
     });
     if (!timer) {
@@ -184,11 +215,14 @@ export const updatePause = async (req, res) => {
 
     const now = Date.now();
 
-    const elapsedTime = now - timer.startedAt + timer.elapsedTime;
+    const elapsedTime = now - timer.lastStartedAt + timer.elapsedTime;
 
-    const updateStatus = await prisma.timer.update({
+    const updateStatus = await prisma.timer.updateMany({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
       data: {
         status,
@@ -220,6 +254,9 @@ export const updateReset = async (req, res) => {
     const timer = await prisma.timer.findFirst({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
     });
     if (!timer) {
@@ -229,9 +266,12 @@ export const updateReset = async (req, res) => {
       throw new Error('타이머가 진행중이지 않습니다.');
     }
 
-    const updateStatus = await prisma.timer.update({
+    const updateStatus = await prisma.timer.updateMany({
       where: {
         studyId,
+        status: {
+          not: 'COMPLETED',
+        },
       },
       data: {
         status,
@@ -244,6 +284,86 @@ export const updateReset = async (req, res) => {
       message: '타이머 상태가 정상적으로 업데이트 되었습니다.',
       data: {
         updateStatus,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// 타이머 집중 완료
+export const updateComplete = async (req, res) => {
+  try {
+    const studyId = Number(req.params.studyId);
+    const status = 'COMPLETED';
+
+    const timer = await prisma.timer.findFirst({
+      where: {
+        studyId,
+        status: {
+          not: 'COMPLETED',
+        },
+      },
+    });
+    if (!timer) {
+      throw new Error('해당 타이머를 찾을 수 없습니다');
+    }
+    if (timer.status === 'CANCELED') {
+      throw new Error('타이머가 진행중이지 않습니다.');
+    }
+
+    // 서버 현재 시간과 DB에 저장된 경과 시간을 비교 검증
+    const now = Date.now();
+    const elapsedTime = now - timer.lastStartedAt + timer.elapsedTime;
+
+    if (elapsedTime < timer.targetDuration) {
+      res.status(200).json({
+        success: false,
+        message: '집중 목표 시간을 완료하지 못했습니다.',
+      });
+      return;
+    }
+
+    // 기본 3포인트 + 설정한 공부시간 10분당 추가 1포인트
+    const points = Math.floor(3 + Number(timer.targetDuration) / 600000);
+    const completedAt = Date.now();
+    const [completedTimer, createdPoint, createdTimer] =
+      await prisma.$transaction([
+        prisma.timer.updateMany({
+          where: {
+            studyId,
+            status: {
+              not: 'COMPLETED',
+            },
+          },
+          data: {
+            status,
+            elapsedTime,
+            completedAt: new Date(completedAt),
+          },
+        }),
+        prisma.pointLog.create({
+          data: {
+            studyId,
+            points,
+            focusDuration: timer.targetDuration,
+          },
+        }),
+        prisma.timer.create({
+          data: {
+            studyId,
+          },
+        }),
+      ]);
+
+    res.status(200).json({
+      success: true,
+      message: '타이머 상태가 정상적으로 업데이트 되었습니다.',
+      data: {
+        createdPoint,
       },
     });
   } catch (error) {

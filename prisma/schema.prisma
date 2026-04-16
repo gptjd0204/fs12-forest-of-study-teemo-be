@@ -19,7 +19,7 @@ model Study {
   emojis      Emoji[]
   habits      Habit[]
   pointLogs   PointLog[]
-  timer       Timer?
+  timer       Timer[]
 
   @@index([createdAt])
   @@index([title])
@@ -68,11 +68,13 @@ model PointLog {
 
 model Timer {
   id             Int      @id @default(autoincrement())
-  studyId        Int      @unique @map("study_id")
-  status         Status   @default(CANCELED)
+  studyId        Int      @map("study_id")
+  status         String   @default("CANCELED")
   targetDuration Int      @default(1500000) @map("target_duration")
   elapsedTime    Int      @default(0) @map("elapsed_time")
-  startedAt      DateTime @default(now()) @map("started_at")
+  firstStartedAt DateTime? @map("first_started_at")
+  lastStartedAt  DateTime? @map("last_started_at")
+  completedAt    DateTime? @map("completed_at")
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
   study          Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
@@ -90,11 +92,4 @@ model Emoji {
   study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
 
   @@map("emojis")
-}
-
-enum Status {
-  IN_PROGRESS
-  PAUSED
-  CANCELED
-  COMPLETED
 }

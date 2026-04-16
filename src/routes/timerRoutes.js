@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createTimer,
   getTimer,
+  updateComplete,
   updatePause,
   updateReset,
   updateStart,
@@ -21,5 +22,7 @@ router.patch('/:studyId/start', updateStart);
 router.patch('/:studyId/pause', updatePause);
 
 router.patch('/:studyId/reset', updateReset);
+
+router.patch('/:studyId/complete', updateComplete);
 
 export default router;
