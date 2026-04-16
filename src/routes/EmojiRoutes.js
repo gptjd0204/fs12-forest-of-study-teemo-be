@@ -3,7 +3,7 @@ import {
   getEmojis,
   createEmoji,
   updateEmoji,
-} from '../controllers/emojiController.js';
+} from '../controllers/EmojiController.js';
 
 const router = Router();
 

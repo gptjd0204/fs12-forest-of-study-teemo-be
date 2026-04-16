@@ -4,7 +4,7 @@ import studyRoutes from './routes/studyRoutes.js';
 import cors from 'cors';
 import pointsRoutes from './routes/PointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
-import emojiRoutes from './routes/emojiRoutes.js';
+import emojiRoutes from './routes/EmojiRoutes.js';
 import LogsRoutes from './routes/LogsRoutes.js';
 import createRoutes from './routes/studyRoutes.js';
 import timerRoutes from './routes/TimerRoutes.js';
