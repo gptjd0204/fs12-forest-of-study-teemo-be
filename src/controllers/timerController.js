@@ -50,6 +50,8 @@ export const getTimer = async (req, res) => {
         id: studyId,
       },
       select: {
+        title: true,
+        description: true,
         timer: true,
       },
     });
@@ -61,6 +63,8 @@ export const getTimer = async (req, res) => {
       success: true,
       message: '요청이 정상적으로 처리되었습니다.',
       data: {
+        title: study.title,
+        description: study.description,
         timer: study.timer,
       },
     });
