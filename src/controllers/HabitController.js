@@ -21,7 +21,7 @@ export const getTodayHabits = async (req, res) => {
         errors: [],
       });
     }
-    // today 추후 toggleHbit 파트랑 뭉쳐서 빼버리기
+    // today 추후 toggleHabit 파트랑 뭉쳐서 빼버리기
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
@@ -149,7 +149,6 @@ export const createHabit = async (req, res) => {
 export const toggleHabit = async (req, res) => {
   try {
     const { studyId, habitId } = req.params;
-    const { isCompleted } = req.body;
 
     const habit = await prisma.habit.findFirst({
       where: {
