@@ -1,12 +1,10 @@
 import express from "express";
 import {
-  getPointLogs,
-  getFocusLogs,
+  getStudyLogs
 } from '../controllers/LogsController.js'
 
 const router = express.Router();
 
-router.get('/:studyId/pointLogs', getPointLogs)
-router.get('/:studyId/focusLogs', getFocusLogs)
+router.get('/:studyId/Logs', getStudyLogs)
 
 export default router;
