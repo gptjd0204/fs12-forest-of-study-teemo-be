@@ -6,7 +6,7 @@ import {
   updateReset,
   updateStart,
   updateTargetDuraion,
-} from '../controllers/TimerController.js';
+} from '../controllers/timerController.js';
 
 const router = express.Router();
 

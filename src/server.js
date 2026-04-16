@@ -2,12 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import studyRoutes from './routes/studyRoutes.js';
 import cors from 'cors';
-import pointsRoutes from './routes/PointsRoutes.js';
+import pointsRoutes from './routes/pointsRoutes.js';
 import HabitRoutes from './routes/HabitRoutes.js';
-import emojiRoutes from './routes/EmojiRoutes.js';
+import emojiRoutes from './routes/emojiRoutes.js';
 import LogsRoutes from './routes/LogsRoutes.js';
 import createRoutes from './routes/studyRoutes.js';
-import timerRoutes from './routes/TimerRoutes.js';
+import timerRoutes from './routes/timerRoutes.js';
 
 dotenv.config();
 
