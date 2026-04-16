@@ -185,7 +185,7 @@ export const getStudy = async (req, res) => {
     });
 
     res.status(200).json({
-      success: false,
+      success: true,
       message: '데이터가 성공적으로 로드되었습니다.',
       data: result,
     });
