@@ -1,12 +1,12 @@
 import prisma from '../lib/prisma.js';
-import { getTodayRange } from '../lib/DateRange.js';
+import { getDateRange } from '../lib/DateRange.js';
 
 // 습관 조회
 export const getTodayHabits = async (req, res) => {
   try {
     const { studyId } = req.params;
 
-    const { start: todayStart, end: tomorrowStart } = getTodayRange();
+    const { start, end } = getDateRange(new Date());
 
     const study = await prisma.study.findUnique({
       where: {
@@ -33,8 +33,8 @@ export const getTodayHabits = async (req, res) => {
         records: {
           where: {
             date: {
-              gte: todayStart,
-              lt: tomorrowStart,
+              gte: start,
+              lte: end,
             },
           },
           select: {

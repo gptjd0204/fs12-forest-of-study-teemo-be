@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma.js';
-import { getTodayRange } from '../lib/DateRange.js';
+import { getDateRange } from '../lib/DateRange.js';
 
 // 습관 생성
 export const createHabit = async (req, res) => {
@@ -77,7 +77,7 @@ export const toggleHabit = async (req, res) => {
   try {
     const { studyId, habitId } = req.params;
 
-    const { start: todayStart, end: tomorrowStart } = getTodayRange();
+    const { start, end } = getDateRange(new Date());
 
     const habit = await prisma.habit.findFirst({
       where: {
@@ -98,8 +98,8 @@ export const toggleHabit = async (req, res) => {
       where: {
         habitId: Number(habitId),
         date: {
-          gte: todayStart,
-          lt: tomorrowStart,
+          gte: start,
+          lte: end,
         },
       },
     });
@@ -117,7 +117,7 @@ export const toggleHabit = async (req, res) => {
       updatedRecord = await prisma.habitRecord.create({
         data: {
           habitId: Number(habitId),
-          date: todayStart,
+          date: start,
           isCompleted: true,
         },
       });
