@@ -280,9 +280,7 @@ export const createStudy = async (req, res) => {
     }
 
     if (password?.trim()) {
-      if (password.length < 8 || password.length > 20) {
-        errors.password = '비밀번호는 8자 이상 20자 이하로 입력해주세요.';
-      } else if (/\s/.test(password)) {
+      if (/\s/.test(password)) {
         errors.password = '비밀번호에 공백은 사용할 수 없습니다.';
       }
     }
