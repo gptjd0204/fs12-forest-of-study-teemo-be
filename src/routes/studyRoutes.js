@@ -4,12 +4,16 @@ import {
   createStudy,
   getStudy,
   updateStudy,
+  validatePw,
+  deleteStudy,
 } from '../controllers/studyController.js';
 
 const router = express.Router();
 
 router.get('/', getStudies);
 router.get('/:studyId', getStudy);
+router.post('/:studyId/pw', validatePw);
+router.delete('/:studyId', deleteStudy);
 router.post('/', createStudy);
 router.patch('/:studyId', updateStudy);
 
