@@ -1,4 +1,4 @@
-export const getDateRange = (date) => {
+export const getDateRange = (date = new Date()) => {
   const start = new Date(date);
   start.setHours(0, 0, 0, 0);
 
