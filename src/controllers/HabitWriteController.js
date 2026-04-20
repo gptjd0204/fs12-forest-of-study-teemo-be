@@ -140,3 +140,90 @@ export const toggleHabit = async (req, res) => {
     });
   }
 };
+
+// 습관 수정
+export const editHabit = async (req, res) => {
+    try {
+      const { studyId, habitId } = req.params;
+      const { name } = req.body;
+
+      if (!name || name.trim() === "") {
+        return res.status(400).json({
+          success: false,
+          massage: '잘못된 요청입니다.',
+          errors: '습관 이름은 필수 입력값입니다.',
+        });
+      }
+
+      const updatedHabit = await prisma.habit.update({
+        where: { 
+          id: Number(habitId), 
+        },
+        data: { 
+          name: name.trim(),
+        },
+      });
+
+      return res.status(200).json({
+        success:true,
+        message: '습관이 수정되었습니다.',
+        data: { 
+          habit: updatedHabit 
+        }
+      });
+
+    } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [],
+    });
+  }
+};
+
+// 습관 삭제
+export const deleteHabit = async (req, res) => {
+  try {
+    const { habitId } = req.params;
+
+    const habit = await prisma.habit.findFirst({
+      where: {
+        id: Number(habitId),
+      }
+    })
+
+    if (!habit) {
+      return res.status(404).json({
+        success: false,
+        message: '종료할 습관을 찾을 수 없습니다.',
+        errors: [],
+      });
+    }
+
+    const endedHabit = await prisma.habit.update({
+      where: { 
+        id: Number(habitId)
+      },
+      data: { 
+        endDate: new Date() 
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: '습관이 삭제되었습니다.',
+      data: { 
+        habit: endedHabit 
+      }
+    });
+
+    } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [],
+    });
+  }
+};
