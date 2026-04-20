@@ -147,13 +147,13 @@ export const editHabit = async (req, res) => {
       const { studyId, habitId } = req.params;
       const { name } = req.body;
 
-      // if (!name || name.trim() === "") {
-      //   return res.status(400).json({
-      //     success: false,
-      //     massage: '잘못된 요청입니다.',
-      //     errors: '습관 이름은 필수 입력값입니다.',
-      //   });
-      // }
+      if (!name || name.trim() === "") {
+        return res.status(400).json({
+          success: false,
+          massage: '잘못된 요청입니다.',
+          errors: '습관 이름은 필수 입력값입니다.',
+        });
+      }
 
       const updatedHabit = await prisma.habit.update({
         where: { 
