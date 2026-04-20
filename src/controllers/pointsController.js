@@ -10,7 +10,12 @@ export const getTotalPoint = async (req, res) => {
       },
     });
     if (!hasStudy) {
-      throw new Error('해당 스터디를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 스터디를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
 
     const totalPoint = await prisma.pointLog.aggregate({
@@ -32,9 +37,10 @@ export const getTotalPoint = async (req, res) => {
       data: { totalPoint: totalPoint._sum.points },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
