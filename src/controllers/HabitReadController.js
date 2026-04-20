@@ -14,6 +14,7 @@ export const getTodayHabits = async (req, res) => {
       },
       select: {
         title: true,
+        nickname: true,
       },
     });
 
