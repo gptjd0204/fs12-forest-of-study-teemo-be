@@ -92,6 +92,7 @@ export const getTimer = async (req, res) => {
       success: true,
       message: '요청이 정상적으로 처리되었습니다.',
       data: {
+        nickname: study.nickname,
         title: study.title,
         timer,
       },
