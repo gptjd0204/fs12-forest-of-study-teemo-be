@@ -14,9 +14,11 @@ export const getTodayHabits = async (req, res) => {
       },
       select: {
         title: true,
+        nickname: true,
       },
     });
 
+    // 스터디 찾기
     if (!study) {
       return res.status(404).json({
         success: false,
@@ -28,6 +30,10 @@ export const getTodayHabits = async (req, res) => {
     const habits = await prisma.habit.findMany({
       where: {
         studyId: Number(studyId),
+        startDate: {
+          lte: end,
+        },
+        endDate: null,
       },
       include: {
         records: {
@@ -87,6 +93,7 @@ export const getWeekHabits = async (req, res) => {
       },
     });
 
+    // 스터디 찾기
     if (!study) {
       return res.status(404).json({
         success: false,
