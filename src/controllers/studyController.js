@@ -265,6 +265,8 @@ export const createStudy = async (req, res) => {
 
     if (!nickname?.trim()) {
       errors.nickname = '닉네임을 입력해주세요.';
+    } else if (nickname.trim().length < 2) {
+      errors.nickname = '닉네임은 2자 이상이어야 합니다.';
     }
 
     if (!title?.trim()) {
