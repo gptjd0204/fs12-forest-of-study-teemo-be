@@ -11,7 +11,12 @@ export const createTimer = async (req, res) => {
       },
     });
     if (!hasStudy) {
-      throw new Error('해당 스터디를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 스터디를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
 
     // 완료된 타이머를 제외하고 조회
@@ -26,8 +31,8 @@ export const createTimer = async (req, res) => {
 
     // 타이머가 없을때만 타이머 생성
     if (isTimer) {
-      res.status(200).json({
-        success: true,
+      res.status(409).json({
+        success: false,
         message: '이미 타이머가 생성되었습니다.',
       });
       return;
@@ -47,9 +52,10 @@ export const createTimer = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -65,7 +71,12 @@ export const getTimer = async (req, res) => {
       },
     });
     if (!study) {
-      throw new Error('해당 스터디를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 스터디를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
 
     const timer = await prisma.timer.findFirst({
@@ -81,14 +92,16 @@ export const getTimer = async (req, res) => {
       success: true,
       message: '요청이 정상적으로 처리되었습니다.',
       data: {
+        nickname: study.nickname,
         title: study.title,
         timer,
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -105,10 +118,19 @@ export const updateTargetDuraion = async (req, res) => {
       },
     });
     if (!timer) {
-      throw new Error('해당 타이머를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 타이머를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
-    if (timer.status === 'IN_PROGRESS') {
-      throw new Error('타이머 진행중엔 수정이 불가능합니다.');
+    if (timer.status === 'IN_PROGRESS' || timer.status === 'PAUSED') {
+      res.status(400).json({
+        success: false,
+        message: '타이머 진행중엔 수정이 불가합니다.',
+      });
+      return;
     }
 
     const updatedTargetDuration = await prisma.timer.updateMany({
@@ -131,9 +153,10 @@ export const updateTargetDuraion = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -153,10 +176,19 @@ export const updateStart = async (req, res) => {
       },
     });
     if (!timer) {
-      throw new Error('해당 타이머를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 타이머를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
     if (timer.status === 'IN_PROGRESS') {
-      throw new Error('이미 타이머가 진행중입니다.');
+      res.status(204).json({
+        success: false,
+        message: '타이머가 이미 진행중입니다.',
+      });
+      return;
     }
 
     const startedAt = Date.now();
@@ -184,9 +216,10 @@ export const updateStart = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -206,11 +239,20 @@ export const updatePause = async (req, res) => {
       },
     });
     if (!timer) {
-      throw new Error('해당 타이머를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 타이머를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
 
     if (timer.status === 'CANCELED' || timer.status === 'PAUSED') {
-      throw new Error('타이머가 진행중이지 않습니다.');
+      res.status(204).json({
+        success: false,
+        message: '타이머가 진행중이지 않습니다.',
+      });
+      return;
     }
 
     const now = Date.now();
@@ -238,9 +280,10 @@ export const updatePause = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -260,10 +303,19 @@ export const updateReset = async (req, res) => {
       },
     });
     if (!timer) {
-      throw new Error('해당 타이머를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 타이머를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
     if (timer.status === 'CANCELED') {
-      throw new Error('타이머가 진행중이지 않습니다.');
+      res.status(204).json({
+        success: false,
+        message: '타이머가 이미 리셋되었습니다.',
+      });
+      return;
     }
 
     const updateStatus = await prisma.timer.updateMany({
@@ -287,9 +339,10 @@ export const updateReset = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
@@ -309,10 +362,18 @@ export const updateComplete = async (req, res) => {
       },
     });
     if (!timer) {
-      throw new Error('해당 타이머를 찾을 수 없습니다');
+      res.status(404).json({
+        success: false,
+        message: '해당 타이머를 찾을 수 없습니다.',
+        errors: [],
+      });
+      return;
     }
     if (timer.status === 'CANCELED') {
-      throw new Error('타이머가 진행중이지 않습니다.');
+      return res.status(204).json({
+        success: false,
+        message: '타이머가 진행중이지 않습니다.',
+      });
     }
 
     // 서버 현재 시간과 DB에 저장된 경과 시간을 비교 검증
@@ -320,9 +381,14 @@ export const updateComplete = async (req, res) => {
     const elapsedTime = now - timer.lastStartedAt + timer.elapsedTime;
 
     if (elapsedTime < timer.targetDuration) {
-      res.status(200).json({
+      res.status(400).json({
         success: false,
-        message: '집중 목표 시간을 완료하지 못했습니다.',
+        message: '집중 목표 시간을 아직 달성하지 못했습니다.',
+        data: {
+          targetDuration: timer.targetDuration,
+          elapsedTime,
+          remainingTime: timer.targetDuration - elapsedTime,
+        },
       });
       return;
     }
@@ -367,9 +433,10 @@ export const updateComplete = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: '서버 내부 오류가 발생했습니다.',
+      errors: [error.message],
     });
   }
 };
