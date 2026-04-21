@@ -273,7 +273,7 @@ export const createStudy = async (req, res) => {
     if (!nickname?.trim()) {
       errors.nickname = '닉네임을 입력해주세요.';
     } else if (nickname !== nickname.trim()) {
-      errors.nickname = '앞뒤 공백은 사용할 수 없습니다.';
+      errors.nickname = '닉네임 앞뒤 공백은 사용할 수 없습니다.';
     } else if (nickname.trim().length < 2) {
       errors.nickname = '닉네임은 2자 이상이어야 합니다.';
     }
@@ -281,7 +281,7 @@ export const createStudy = async (req, res) => {
     if (!title?.trim()) {
       errors.title = '제목을 입력해주세요.';
     } else if (title !== title.trim()) {
-      errors.title = '앞뒤 공백은 사용할 수 없습니다.';
+      errors.title = '제목 앞뒤 공백은 사용할 수 없습니다.';
     }
 
     if (!background?.trim()) {
@@ -369,12 +369,14 @@ export const updateStudy = async (req, res) => {
       });
     }
 
-    const { nickname, title, background, password } = updateData;
+    const { nickname, title, background } = updateData;
     const errors = {};
 
     if (nickname !== undefined) {
       if (!nickname.trim()) {
         errors.nickname = '닉네임을 입력해주세요.';
+      } else if (nickname !== nickname.trim()) {
+        errors.nickname = '닉네임 앞뒤 공백은 사용할 수 없습니다.';
       } else if (nickname.trim().length < 2) {
         errors.nickname = '닉네임은 2자 이상이어야 합니다.';
       }
@@ -383,6 +385,8 @@ export const updateStudy = async (req, res) => {
     if (title !== undefined) {
       if (!title.trim()) {
         errors.title = '제목을 입력해주세요.';
+      } else if (title !== title.trim()) {
+        errors.title = '제목 앞뒤 공백은 사용할 수 없습니다.';
       }
     }
 
@@ -392,12 +396,12 @@ export const updateStudy = async (req, res) => {
       }
     }
 
-    if (password !== undefined) {
-      if (!password.trim()) {
-        errors.password = '비밀번호를 입력해주세요.';
-      } else if (/\s/.test(password)) {
-        errors.password = '비밀번호에 공백은 사용할 수 없습니다.';
-      }
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: Object.values(errors)[0],
+        errors,
+      });
     }
 
     const updatedStudy = await prisma.study.update({
