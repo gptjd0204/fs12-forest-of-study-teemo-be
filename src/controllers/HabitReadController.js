@@ -64,6 +64,7 @@ export const getTodayHabits = async (req, res) => {
       message: '오늘의 습관 목록 조회에 성공했습니다.',
       data: {
         studyTitle: study.title,
+        studyNickname: study.nickname,
         habits: habitIds,
       },
     });
