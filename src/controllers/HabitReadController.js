@@ -140,7 +140,16 @@ export const getWeekHabits = async (req, res) => {
       },
     });
 
-    const weeklyHabits = habits.map((h) => ({
+    const filterHabits = habits.filter((h) => {
+      const hasTrueThisWeek = h.records.some((r) => r.isCompleted === true);
+      if (h.endDate === null) return true;
+
+      if (hasTrueThisWeek) return true;
+
+      return false;
+    });
+
+    const weeklyHabits = filterHabits.map((h) => ({
       id: h.id,
       name: h.name,
       records: h.records,
