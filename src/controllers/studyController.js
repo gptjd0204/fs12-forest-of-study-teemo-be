@@ -259,16 +259,29 @@ export const deleteStudy = async (req, res) => {
 
 export const createStudy = async (req, res) => {
   try {
-    const { nickname, title, description, background, password } = req.body;
+    const {
+      nickname,
+      title,
+      description,
+      background,
+      password,
+      confirmPassword,
+    } = req.body;
 
     const errors = {};
 
     if (!nickname?.trim()) {
       errors.nickname = '닉네임을 입력해주세요.';
+    } else if (nickname !== nickname.trim()) {
+      errors.nickname = '닉네임 앞뒤 공백은 사용할 수 없습니다.';
+    } else if (nickname.trim().length < 2) {
+      errors.nickname = '닉네임은 2자 이상이어야 합니다.';
     }
 
     if (!title?.trim()) {
       errors.title = '제목을 입력해주세요.';
+    } else if (title !== title.trim()) {
+      errors.title = '제목 앞뒤 공백은 사용할 수 없습니다.';
     }
 
     if (!background?.trim()) {
@@ -285,10 +298,14 @@ export const createStudy = async (req, res) => {
       }
     }
 
+    if (confirmPassword !== undefined && confirmPassword !== password) {
+      errors.confirmPassword = '비밀번호가 일치하지 않습니다.';
+    }
+
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({
         success: false,
-        message: '잘못된 요청입니다.',
+        message: Object.values(errors)[0],
         errors,
       });
     }
@@ -349,6 +366,41 @@ export const updateStudy = async (req, res) => {
         success: false,
         message: '해당 스터디를 찾을 수 없습니다',
         errors: ['Study not found'],
+      });
+    }
+
+    const { nickname, title, background } = updateData;
+    const errors = {};
+
+    if (nickname !== undefined) {
+      if (!nickname.trim()) {
+        errors.nickname = '닉네임을 입력해주세요.';
+      } else if (nickname !== nickname.trim()) {
+        errors.nickname = '닉네임 앞뒤 공백은 사용할 수 없습니다.';
+      } else if (nickname.trim().length < 2) {
+        errors.nickname = '닉네임은 2자 이상이어야 합니다.';
+      }
+    }
+
+    if (title !== undefined) {
+      if (!title.trim()) {
+        errors.title = '제목을 입력해주세요.';
+      } else if (title !== title.trim()) {
+        errors.title = '제목 앞뒤 공백은 사용할 수 없습니다.';
+      }
+    }
+
+    if (background !== undefined) {
+      if (!background.trim()) {
+        errors.background = '배경을 선택해주세요.';
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: Object.values(errors)[0],
+        errors,
       });
     }
 
