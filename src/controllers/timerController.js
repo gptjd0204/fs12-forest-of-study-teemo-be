@@ -370,10 +370,11 @@ export const updateComplete = async (req, res) => {
       return;
     }
     if (timer.status === 'CANCELED') {
-      return res.status(204).json({
+      res.status(204).json({
         success: false,
         message: '타이머가 진행중이지 않습니다.',
       });
+      return;
     }
 
     // 서버 현재 시간과 DB에 저장된 경과 시간을 비교 검증
@@ -383,7 +384,7 @@ export const updateComplete = async (req, res) => {
     if (elapsedTime < timer.targetDuration) {
       res.status(400).json({
         success: false,
-        message: '집중 목표 시간을 아직 달성하지 못했습니다.',
+        message: '아직 집중 목표 시간을 달성하지 못했습니다.',
         data: {
           targetDuration: timer.targetDuration,
           elapsedTime,
@@ -421,6 +422,7 @@ export const updateComplete = async (req, res) => {
         prisma.timer.create({
           data: {
             studyId,
+            targetDuration: timer.targetDuration,
           },
         }),
       ]);
