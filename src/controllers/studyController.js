@@ -341,6 +341,12 @@ export const createStudy = async (req, res) => {
       data: result,
     });
   } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(400).json({
+        success: false,
+        message: '이미 같은 닉네임과 제목이 존재합니다.',
+      });
+    }
     return res.status(500).json({
       success: false,
       message: '서버 내부 오류가 발생했습니다.',
@@ -421,7 +427,12 @@ export const updateStudy = async (req, res) => {
       data: updatedStudy,
     });
   } catch (error) {
-    console.error(error);
+    if (error.code === 'P2002') {
+      return res.status(400).json({
+        success: false,
+        message: '이미 같은 닉네임과 제목이 존재합니다.',
+      });
+    }
 
     return res.status(500).json({
       success: false,
