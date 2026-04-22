@@ -297,12 +297,10 @@ export const createStudy = async (req, res) => {
 
     if (!password?.trim()) {
       errors.password = '비밀번호를 입력해주세요.';
-    }
-
-    if (password?.trim()) {
-      if (/\s/.test(password)) {
-        errors.password = '비밀번호에 공백은 사용할 수 없습니다.';
-      }
+    } else if (/\s/.test(password)) {
+      errors.password = '비밀번호에 공백은 사용할 수 없습니다.';
+    } else if (password.trim().length < 8) {
+      errors.password = '비밀번호는 8자 이상이어야 합니다.';
     }
 
     if (confirmPassword !== undefined && confirmPassword !== password) {
