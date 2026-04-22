@@ -271,3 +271,11 @@ GET /api/points/:id
 ```
 
 - 500 Internal Server Error : 서버 내부 오류
+
+```
+{
+  "success": false,
+  "message": "서버 내부 오류가 발생했습니다.",
+  "errors": []
+}
+```
