@@ -1,4 +1,5 @@
 import prisma from '../lib/prisma.js';
+import bcrypt from 'bcrypt';
 
 // 디폴트 값 설정
 const DEFAULT_PAGE = 1;
@@ -197,34 +198,37 @@ export const getStudy = async (req, res) => {
   }
 };
 
-export const validatePw = async (req, res) => {
+// 비밀번호 검증
+export const validatePassword = async (req, res) => {
   const { studyId } = req.params;
   const { password } = req.body;
 
   try {
-    const result = await prisma.study.findUnique({
+    const study = await prisma.study.findUnique({
       where: {
         id: Number(studyId),
-        password: password,
       },
     });
 
-    if (!result) {
+    if (!study) {
+      res.status(401).json({
+        success: false,
+        message: '해당 스터디를 찾을 수 없습니다.',
+      });
+    }
+
+    // 해시된 비밀번호 비교
+    const isMatch = await bcrypt.compare(password, study.password);
+
+    if (isMatch) {
       res.status(200).json({
         success: true,
-        message: '비밀번호 불일치',
-        data: {
-          correct: false,
-        },
+        message: '비밀번호가 일치합니다.',
       });
     } else {
-      res.status(200).json({
-        success: true,
-        message: '비밀번호 일치',
-        data: {
-          correct: true,
-        },
-      });
+      res
+        .status(401)
+        .json({ success: false, message: '비밀번호가 일치하지 않습니다.' });
     }
   } catch (error) {
     res.status(400).json({
@@ -267,6 +271,9 @@ export const createStudy = async (req, res) => {
       password,
       confirmPassword,
     } = req.body;
+
+    // bcrypt를 이용해 비밀번호 해싱
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const errors = {};
 
@@ -316,7 +323,7 @@ export const createStudy = async (req, res) => {
         title,
         description,
         background,
-        password,
+        password: hashedPassword,
       },
       select: {
         id: true,
