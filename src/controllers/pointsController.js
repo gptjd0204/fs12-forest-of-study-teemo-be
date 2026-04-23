@@ -27,14 +27,9 @@ export const getTotalPoint = async (req, res) => {
       },
     });
 
-    // 스터디 첫 생성 시, 포인트 로그가 없을 때
-    if (!totalPoint._sum.points) {
-      totalPoint._sum.points = 0;
-    }
-
     res.status(200).json({
       success: true,
-      data: { totalPoint: totalPoint._sum.points },
+      data: { totalPoint: totalPoint._sum.points || 0 },
     });
   } catch (error) {
     res.status(500).json({
