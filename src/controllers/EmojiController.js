@@ -8,6 +8,11 @@ export const getEmojis = async (req, res) => {
       where: {
         studyId: Number(studyId),
       },
+      select: {
+        id: true,
+        emoji: true,
+        count: true,
+      },
     });
 
     if (!result) {
