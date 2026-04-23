@@ -18,15 +18,28 @@ export const getStudyLogs = async (req, res) => {
     const { date } = req.query;
     const { start, end } = getDateRange(date);
 
-    const totalCount = await prisma.pointLog.count({
-      where: {
-        studyId: Number(studyId),
-        createdAt: {
-          gte: start,
-          lte: end
+    const [totalCount, totals] = await Promise.all([
+      prisma.pointLog.count({
+        where: { 
+          studyId: Number(studyId), 
+          createdAt: { 
+            gte: start,
+            lte: end
+          }}
+      }),
+      prisma.pointLog.aggregate({
+        where: { 
+          studyId: Number(studyId),
+          createdAt: {
+            gte: start,
+            lte: end 
+          }},
+        _sum: {
+          points: true,
+          focusDuration: true
         }
-      }
-    })
+      })
+    ]);
 
     const totalPages = Math.ceil(totalCount / pageSize);
     const skip = (page - 1 ) * pageSize;
@@ -49,6 +62,11 @@ export const getStudyLogs = async (req, res) => {
       "message": "요청이 정상적으로 처리되었습니다.",
       "data": {
         logs: logs,
+        totalStats: {
+          totalPoint: totals._sum.points || 0,
+          totalFocus: totals._sum.focusDuration || 0
+        },
+
         pagination: {
           currentPage: page,
           pageSize: pageSize,
