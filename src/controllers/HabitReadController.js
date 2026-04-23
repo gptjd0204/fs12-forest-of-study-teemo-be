@@ -153,13 +153,14 @@ export const getWeekHabits = async (req, res) => {
       id: h.id,
       name: h.name,
       records: h.records,
+      startDate: h.startDate,
+      endDate: h.endDate,
     }));
 
     return res.status(200).json({
       success: true,
       message: '주간 습관 목록 조회에 성공했습니다.',
       data: {
-        studyTitle: study.title,
         habits: weeklyHabits,
       },
     });

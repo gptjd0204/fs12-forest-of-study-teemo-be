@@ -179,11 +179,30 @@ export const getStudies = async (req, res) => {
 export const getStudy = async (req, res) => {
   const { studyId } = req.params;
   try {
-    const result = await prisma.study.findUnique({
+    const study = await prisma.study.findUnique({
       where: {
         id: Number(studyId),
       },
+      select: {
+        nickname: true,
+        title: true,
+        description: true,
+      },
     });
+
+    const points = await prisma.pointLog.findMany({
+      where: {
+        studyId: Number(studyId),
+      },
+      select: {
+        points: true,
+      },
+    });
+
+    const result = {
+      study,
+      points,
+    };
 
     res.status(200).json({
       success: true,
