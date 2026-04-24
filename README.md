@@ -49,10 +49,11 @@ src/
 |    ├── pointsController.js
 |    ├── studyController.js
 |    ├── timerController.js
+     └── pointsController.js
 |
 ├── lib
 |    ├── DateRange.js
-|    ├── prisma.js
+|    └── prisma.js
 |
 ├── routes/        # 라우터
 |    ├── EmojiRoutes.js
@@ -60,9 +61,11 @@ src/
 |    ├── LogsRoutes.js
 |    ├── studyRoutes.js
 |    ├── timerRoutes.js
+     └── pointsRoutes.js
 |
 ├── prisma/        # Prisma 스키마
-|    ├── seeds
+     ├── schema.prisma
+|    ├── seeds/
 |        ├── seed.js
 |        ├── seedDatas.js
 |
