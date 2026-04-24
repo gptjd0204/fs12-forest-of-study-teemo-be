@@ -187,7 +187,10 @@ export const getStudy = async (req, res) => {
         nickname: true,
         title: true,
         description: true,
+        background: true,
         id: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
