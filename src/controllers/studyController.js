@@ -187,6 +187,7 @@ export const getStudy = async (req, res) => {
         nickname: true,
         title: true,
         description: true,
+        id: true,
       },
     });
 
