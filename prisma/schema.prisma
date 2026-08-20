@@ -1,24 +1,96 @@
-// Prisma 클라이언트 설정
 generator client {
   provider = "prisma-client-js"
 }
 
-// 데이터베이스 연결 설정
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Study 스키마
 model Study {
-  id        Int      @id @default(autoincrement())
-  nickname  String   
-  password  String
-  title     String
-  description  String?
+  id          Int        @id @default(autoincrement())
+  nickname    String
+  password    String
+  title       String
+  description String?
   background  String
-  createdAt DateTime @default(now())  @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  emojis      Emoji[]
+  habits      Habit[]
+  pointLogs   PointLog[]
+  timer       Timer[]
 
+  @@index([createdAt])
+  @@index([title])
+  @@index([nickname])
+  @@unique([nickname, title])
   @@map("studies")
+}
+
+model Habit {
+  id        Int           @id @default(autoincrement())
+  name      String
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  endDate   DateTime?     @map("end_date")
+  studyId   Int           @map("study_id")
+  startDate DateTime      @map("start_date")
+  records   HabitRecord[]
+  study     Study         @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@map("habits")
+}
+
+model HabitRecord {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  habitId     Int      @map("habit_id")
+  isCompleted Boolean  @default(false) @map("is_completed")
+  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@map("habit_records")
+}
+
+model PointLog {
+  id            Int      @id @default(autoincrement())
+  studyId       Int      @map("study_id")
+  points        Int      @default(0)
+  focusDuration Int      @map("focus_duration")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  study         Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@map("point_logs")
+}
+
+model Timer {
+  id             Int      @id @default(autoincrement())
+  studyId        Int      @map("study_id")
+  status         String   @default("CANCELED")
+  targetDuration Int      @default(1500000) @map("target_duration")
+  elapsedTime    Int      @default(0) @map("elapsed_time")
+  firstStartedAt DateTime? @map("first_started_at")
+  lastStartedAt  DateTime? @map("last_started_at")
+  completedAt    DateTime? @map("completed_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  study          Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@map("timers")
+}
+
+model Emoji {
+  id        Int      @id @default(autoincrement())
+  studyId   Int      @map("study_id")
+  emoji     String
+  count     Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  study     Study    @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@map("emojis")
 }
